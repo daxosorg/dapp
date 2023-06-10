@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "797537370145",
+    "project_id": "dapp-c8988",
+    "storage_bucket": "dapp-c8988.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797537370145:android:00510ac66df52561bc6360",
+        "android_client_info": {
+          "package_name": "daxos.software.dapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797537370145-4a97qa7gtb4llfo8reg6eup437sanb1b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daxos.software.dapp",
+            "certificate_hash": "952e5897d765eb5da85601295603f84f60453a98"
+          }
+        },
+        {
+          "client_id": "797537370145-ti0hlj536lfkma6e8nth61kn7kgkusiu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAojJDkGTGgzSijuNPfSQT_BdYjt9mEdVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797537370145-ti0hlj536lfkma6e8nth61kn7kgkusiu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
