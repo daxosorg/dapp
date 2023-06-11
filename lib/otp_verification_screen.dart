@@ -1,68 +1,64 @@
-// A screen for verifying otp received from firebase
-import 'package:dapp/dashboard_screen.dart';
+import 'package:dapp/controllers/otp_verfication_screen_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class OtpVerificationScreen extends StatefulWidget {
+class OtpVerificationScreen extends StatelessWidget {
+  const OtpVerificationScreen({Key? key, this.verificationId, this.credential}) : super(key: key);
+
   final String? verificationId;
   final PhoneAuthCredential? credential;
 
-  const OtpVerificationScreen({Key? key, this.verificationId, this.credential}) : super(key: key);
-
-  @override
-  _OtpVerificationScreenState createState() => _OtpVerificationScreenState();
-}
-
-class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final _otpController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-
-  void _verifyOtp() async {
-    try {
-      if (widget.verificationId != null) {
-        // Create a PhoneAuthCredential with the code
-        final credential = PhoneAuthProvider.credential(
-          verificationId: widget.verificationId!,
-          smsCode: _otpController.text,
-        );
-        // Sign in with the credential
-        await _auth.signInWithCredential(credential);
-      } else if (widget.credential != null) {
-        // Sign in with the auto verified credential
-        await _auth.signInWithCredential(widget.credential!);
-      }
-      // Navigate to dashboard screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const DashboardScreen(),
-        ),
-      );
-    } catch (e) {
-// Handle errors
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final otpVerificationScreenController = Get.put(
+      OtpVerificationScreenController(
+        verificationId: verificationId,
+        credential: credential,
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('OTP Verification'),
+        centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _otpController,
-              decoration: const InputDecoration(
-                hintText: 'Enter the OTP',
-              ),
-              keyboardType: TextInputType.number,
+            const SizedBox(height: 32.0),
+            Text(
+              'Enter the OTP',
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
             ),
-            ElevatedButton(
-              onPressed: _verifyOtp,
-              child: const Text('Verify'),
+            const SizedBox(height: 32.0),
+            TextFormField(
+              controller: otpVerificationScreenController.otpController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'OTP', border: OutlineInputBorder(), prefixIcon: Icon(Icons.lock_outline)),
+            ),
+            const SizedBox(height: 24.0),
+            Obx(
+              () => otpVerificationScreenController.isVerifyingOtp.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ElevatedButton(
+                      onPressed: otpVerificationScreenController.verifyOtp,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Text('Verify', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
             ),
           ],
         ),

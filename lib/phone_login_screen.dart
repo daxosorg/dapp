@@ -1,91 +1,54 @@
-import 'package:dapp/otp_verification_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dapp/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class PhoneLoginScreen extends StatefulWidget {
-  const PhoneLoginScreen({Key? key}) : super(key: key);
+class PhoneLoginScreen extends StatelessWidget {
+  final loginController = Get.put(LoginController());
 
-  @override
-  _PhoneLoginScreenState createState() => _PhoneLoginScreenState();
-}
-
-class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
-  final _phoneController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
-
-  void _loginWithPhoneNumber() async {
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: _phoneController.text,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => OtpVerificationScreen(credential: credential),
-            ),
-          );
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          print(e.message);
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => OtpVerificationScreen(verificationId: verificationId),
-            ),
-          );
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
+  PhoneLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Phone Login'),
+        centerTitle: true,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue.shade400,
-              Colors.blue.shade900,
-            ],
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: TextField(
-                  controller: _phoneController,
-                  decoration: const InputDecoration(hintText: 'Enter your phone number', border: InputBorder.none, contentPadding: EdgeInsets.all(16)),
-                ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 32.0),
+            Text('Enter your phone number', style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
+            const SizedBox(height: 32.0),
+            TextFormField(
+              controller: loginController.phoneController,
+              keyboardType: TextInputType.phone,
+              style: const TextStyle(color: Colors.black),
+              decoration: const InputDecoration(
+                labelText: 'Enter your phone number',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.phone, color: Colors.blue),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => _loginWithPhoneNumber(),
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.blue.shade900,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                child: Text('Login', style: TextStyle(color: Colors.blue.shade900)),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            Obx(
+              () => loginController.isOtpSending.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: () => loginController.loginWithPhoneNumber(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Text('Send OTP', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
