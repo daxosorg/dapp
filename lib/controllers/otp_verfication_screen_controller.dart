@@ -1,5 +1,5 @@
 import 'package:dapp/constants/string_constants.dart';
-import 'package:dapp/dashboard_screen.dart';
+import 'package:dapp/home_screen.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class OtpVerificationScreenController extends GetxController {
         isVerifyingOtp.value = false;
       }
 
-      Get.to(() => const DashboardScreen());
+      Get.to(() => const HomeScreen());
     } catch (e) {
       isVerifyingOtp.value = false;
       StringConstants.wrongOTP.showToast();
