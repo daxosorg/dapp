@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   final phoneController = TextEditingController(text: "8439228724");
+  final nameController = TextEditingController();
   final auth = FirebaseAuth.instance;
   RxBool isOtpSending = false.obs;
 
