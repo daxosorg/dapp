@@ -17,7 +17,8 @@ dependencies:
   geolocator: ^9.0.2
   firebase_core: ^2.13.0
   cloud_firestore: ^4.7.1
-  get: ^4.6.5  
+  get: ^4.6.5  # For managing state
+  geocoding: ^2.1.0 # To get address from latlng  
 
 dev_dependencies:
   flutter_test:

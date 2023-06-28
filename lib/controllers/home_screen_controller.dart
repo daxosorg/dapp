@@ -8,7 +8,7 @@ class HomeScreenController extends GetxController {
   final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
   Position? position;
   final nameController = TextEditingController();
-  List<int> availableQuantities = [1, 2];
+  List<int> availableQuantities = [1, 2, 3];
   RxInt selectedQuantity = 1.obs;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getMyHangouts(String userId) async* {

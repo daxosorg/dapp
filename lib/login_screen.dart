@@ -23,12 +23,12 @@ class LoginScreen extends StatelessWidget {
               const Spacer(),
               TextFormField(
                 controller: loginController.nameController,
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.name,
                 style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: StringConstants.enterYourName,
-                  border: const OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.person, color: Colors.blue),
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person, color: Colors.blue),
                 ),
               ),
               const SizedBox(height: 24.0),
@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                 keyboardType: TextInputType.phone,
                 style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
-                  labelText: 'Enter your phone number',
+                  labelText: StringConstants.enterYourPhoneNumber,
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.phone, color: Colors.blue),
                 ),

@@ -1,8 +1,7 @@
+import 'package:dapp/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'otp_verification_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +9,8 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       // home: const HomeScreen(),
-      home: const OtpVerificationScreen(),
+      home: LoginScreen(),
+      // home: const OtpVerificationScreen(),
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),
