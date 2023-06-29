@@ -1,16 +1,18 @@
+import 'package:dapp/home_screen.dart';
 import 'package:dapp/login_screen.dart';
+import 'package:dapp/utils/login_status_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await GetStorage.init();
   runApp(
     GetMaterialApp(
-      // home: const HomeScreen(),
-      home: LoginScreen(),
-      // home: const OtpVerificationScreen(),
+      home: LoginStatusHelper.getLoginStatus() ? LoginScreen() : const HomeScreen(),
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),

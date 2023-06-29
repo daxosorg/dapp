@@ -11,12 +11,7 @@ class OtpVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final otpVerificationScreenController = Get.put(
-      OtpVerificationScreenController(
-        verificationId: verificationId,
-        credential: credential,
-      ),
-    );
+    final otpVerificationScreenController = Get.put(OtpVerificationScreenController(verificationId: verificationId, credential: credential));
 
     return Scaffold(
       body: SingleChildScrollView(

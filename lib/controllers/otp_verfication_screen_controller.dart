@@ -17,10 +17,7 @@ class OtpVerificationScreenController extends GetxController {
     try {
       isVerifyingOtp.value = true;
       if (verificationId != null) {
-        final credential = PhoneAuthProvider.credential(
-          verificationId: verificationId!,
-          smsCode: otpController.text,
-        );
+        final credential = PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: otpController.text);
         await auth.signInWithCredential(credential);
         isVerifyingOtp.value = false;
       } else if (credential != null) {

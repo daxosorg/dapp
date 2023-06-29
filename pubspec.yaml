@@ -19,6 +19,7 @@ dependencies:
   cloud_firestore: ^4.7.1
   get: ^4.6.5  # For managing state
   geocoding: ^2.1.0 # To get address from latlng  
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
