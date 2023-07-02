@@ -22,17 +22,6 @@ class LoginScreen extends StatelessWidget {
               Image.asset('assets/water_jar_image.png'),
               const Spacer(),
               TextFormField(
-                controller: loginController.nameController,
-                keyboardType: TextInputType.name,
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  labelText: StringConstants.enterYourName,
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person, color: Colors.blue),
-                ),
-              ),
-              const SizedBox(height: 24.0),
-              TextFormField(
                 controller: loginController.phoneController,
                 keyboardType: TextInputType.phone,
                 style: const TextStyle(color: Colors.black),
@@ -43,20 +32,13 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 48),
-              Obx(
-                () => loginController.isOtpSending.value
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: () => loginController.loginWithPhoneNumber(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text('Continue', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)),
-                        ),
-                      ),
+              ElevatedButton(
+                onPressed: () => loginController.loginWithPhoneNumber(),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Continue', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)),
+                ),
               ),
             ],
           ),

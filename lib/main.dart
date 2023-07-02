@@ -12,7 +12,7 @@ Future<void> main() async {
   await GetStorage.init();
   runApp(
     GetMaterialApp(
-      home: LoginStatusHelper.getLoginStatus() ? LoginScreen() : const HomeScreen(),
+      home: LoginStatusHelper.isUserLoggedIn() ? const HomeScreen() : LoginScreen(),
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),

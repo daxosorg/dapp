@@ -34,20 +34,13 @@ class OtpVerificationScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 48),
-              Obx(
-                () => otpVerificationScreenController.isVerifyingOtp.value
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: otpVerificationScreenController.verifyOtp,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text('Verify', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)),
-                        ),
-                      ),
+              ElevatedButton(
+                onPressed: otpVerificationScreenController.verifyOtp,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Verify', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)),
+                ),
               ),
             ],
           ),
