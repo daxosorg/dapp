@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp/constants/string_constants.dart';
 import 'package:dapp/controllers/login_controller.dart';
+import 'package:dapp/order_success_dialog.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/location_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
 import 'package:dapp/utils/user_data_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -37,7 +37,8 @@ class HomeScreenController extends GetxController {
       await createAndSaveLatestBuyerData();
       await saveOrderToDB();
       ScreenLoaderHelper.hideLoader();
-      showOrderPlacedDialog();
+      // showOrderPlacedDialog();
+      showOrderSuccessDialog();
     } on Exception catch (e) {
       ScreenLoaderHelper.hideLoader();
       e.toString().showToast();
@@ -53,7 +54,7 @@ class HomeScreenController extends GetxController {
 
   Future<Map<String, dynamic>> createBuyerData() async {
     Position position = await LocationHelper.getPosition();
-    String userName = UserDataHelper.getUserName() ?? nameController.text;
+    String userName = UserDataHelper.getUserId() ?? nameController.text;
     return {
       "name": userName,
       "address": deliveryAddressController.text,
@@ -67,10 +68,10 @@ class HomeScreenController extends GetxController {
     String buyerUserId = Get.find<LoginController>().phoneController.text;
     List<String> userIDs = [sellerUserId, buyerUserId];
     userIDs.sort();
-    String collectionName = "${userIDs[0]}_${userIDs[0]}";
+    String collectionName = "${userIDs[0]}_${userIDs[1]}";
     final docRef = FirebaseFirestore.instance.collection(StringConstants.allOrders).doc(collectionName).collection(StringConstants.orders).doc();
     await docRef.set({
-      "orderTime": "06:30PM",
+      "orderTime": DateTime.now().toString(),
       "orderid": docRef.id,
       "quantity": selectedQuantity.value,
       "status": "Pending",
@@ -85,6 +86,8 @@ class HomeScreenController extends GetxController {
     await UserDataHelper.setUserName(userName: nameController.text);
     await UserDataHelper.setUserAddress(userAddress: deliveryAddressController.text);
   }
+
+  void showOrderSuccessDialog() => showDialog(context: Get.context!, builder: (BuildContext context) => const OrderSuccessDialog());
 
   void showOrderPlacedDialog() {
     showDialog(
@@ -111,37 +114,6 @@ class HomeScreenController extends GetxController {
     } catch (e) {
       log(e.toString());
       rethrow;
-    }
-  }
-
-  void getCurrentLocation() async {
-    try {
-      //
-      await Geolocator.getCurrentPosition(forceAndroidLocationManager: true, desiredAccuracy: LocationAccuracy.best).then((value) async {
-        await FirebaseFirestore.instance.collection('buyers').doc('text').set({
-          "name": "karan",
-          "userLat": value.latitude,
-          "userLng": value.longitude,
-        }).then((value) {
-          ScreenLoaderHelper.hideLoader();
-          // Get.to(() => OtpVerificationScreen(credential: credential));
-        });
-      });
-      //
-      LocationPermission permission = await geolocator.checkPermission();
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-        permission = await geolocator.requestPermission();
-      }
-      if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
-        position = await geolocator.getCurrentPosition();
-        await FirebaseFirestore.instance.collection('locations').add({
-          'latitude': position!.latitude,
-          'longitude': position!.longitude,
-          'timestamp': position!.timestamp,
-        });
-      }
-    } on PlatformException catch (e) {
-      log(e.message.toString());
     }
   }
 }

@@ -22,6 +22,6 @@ class LocationHelper {
       return Future.error('Location permissions are permanently denied, please allow it from app info settings.');
     }
 
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 }

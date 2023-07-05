@@ -29,7 +29,7 @@ class OtpVerificationScreenController extends GetxController {
         await auth.signInWithCredential(credential!);
         ScreenLoaderHelper.hideLoader();
       }
-      await UserDataHelper.setUserName(userName: Get.find<LoginController>().phoneController.text);
+      await UserDataHelper.setUserId(userId: Get.find<LoginController>().phoneController.text);
       Get.off(() => const HomeScreen());
       await LoginStatusHelper.setLoginStatus(isUserLoggedIn: true);
       UserDataHelper.setUserPhone(phoneNumber: Get.find<LoginController>().phoneController.text);
