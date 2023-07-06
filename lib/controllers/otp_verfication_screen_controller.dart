@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dapp/constants/string_constants.dart';
 import 'package:dapp/controllers/login_controller.dart';
-import 'package:dapp/home_screen.dart';
+import 'package:dapp/views/home_screen.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/login_status_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
@@ -30,7 +30,7 @@ class OtpVerificationScreenController extends GetxController {
         ScreenLoaderHelper.hideLoader();
       }
       await UserDataHelper.setUserId(userId: Get.find<LoginController>().phoneController.text);
-      Get.off(() => const HomeScreen());
+      Get.off(() =>  HomeScreen());
       await LoginStatusHelper.setLoginStatus(isUserLoggedIn: true);
       UserDataHelper.setUserPhone(phoneNumber: Get.find<LoginController>().phoneController.text);
     } catch (e) {

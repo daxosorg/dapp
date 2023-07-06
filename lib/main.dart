@@ -1,5 +1,5 @@
-import 'package:dapp/home_screen.dart';
-import 'package:dapp/login_screen.dart';
+import 'package:dapp/views/home_screen.dart';
+import 'package:dapp/views/login_screen.dart';
 import 'package:dapp/utils/login_status_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ Future<void> main() async {
   await GetStorage.init();
   runApp(
     GetMaterialApp(
-      home: LoginStatusHelper.isUserLoggedIn() ? const HomeScreen() : LoginScreen(),
+      home: LoginStatusHelper.isUserLoggedIn() ?  HomeScreen() : LoginScreen(),
       theme: ThemeData(
         primarySwatch: Colors.lightBlue,
       ),

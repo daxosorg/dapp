@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:dapp/otp_verification_screen.dart';
+import 'package:dapp/views/otp_verification_screen.dart';
+import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class LoginController extends GetxController {
           Get.to(() => OtpVerificationScreen(verificationId: verificationId));
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          ScreenLoaderHelper.hideLoader();
+          
         },
       );
     } catch (e) {

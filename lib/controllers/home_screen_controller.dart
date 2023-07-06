@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp/constants/string_constants.dart';
 import 'package:dapp/controllers/login_controller.dart';
-import 'package:dapp/order_success_dialog.dart';
+import 'package:dapp/views/other/order_success_dialog.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/location_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
