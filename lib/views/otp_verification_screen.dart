@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OtpVerificationScreen extends StatelessWidget {
-  OtpVerificationScreen({Key? key, this.verificationId, this.credential}) : super(key: key);
+  const OtpVerificationScreen({Key? key, this.verificationId, this.credential}) : super(key: key);
 
   final String? verificationId;
   final PhoneAuthCredential? credential;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +19,13 @@ class OtpVerificationScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           height: Get.size.height,
           child: Form(
-            key: _formKey,
+            key: otpVerificationScreenController.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Spacer(),
-                Image.asset('assets/water_jar_image.png'),
+                const Icon(Icons.verified_user_outlined, size: 200, color: Colors.blue),
+                // Image.asset('assets/water_jar_image.png'),
                 const Spacer(),
                 TextFormField(
                   controller: otpVerificationScreenController.otpController,
@@ -45,7 +45,7 @@ class OtpVerificationScreen extends StatelessWidget {
                 const SizedBox(height: 48),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (otpVerificationScreenController.formKey.currentState!.validate()) {
                       otpVerificationScreenController.verifyOtp();
                     }
                   },

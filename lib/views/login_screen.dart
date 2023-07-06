@@ -22,7 +22,8 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Spacer(),
-                Image.asset('assets/water_jar_image.png'),
+                const Icon(Icons.phone_android_rounded, size: 200, color: Colors.blue),
+                // Image.asset('assets/water_jar_image.png'),
                 const Spacer(),
                 TextFormField(
                   controller: loginController.phoneController,

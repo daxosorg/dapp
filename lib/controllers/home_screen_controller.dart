@@ -2,18 +2,19 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dapp/constants/string_constants.dart';
-import 'package:dapp/controllers/login_controller.dart';
-import 'package:dapp/views/other/order_success_dialog.dart';
+import 'package:dapp/models/seller.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/location_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
 import 'package:dapp/utils/user_data_helper.dart';
+import 'package:dapp/views/other/order_success_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class HomeScreenController extends GetxController {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
   Position? position;
   final nameController = TextEditingController(text: UserDataHelper.getUserName());
@@ -29,6 +30,16 @@ class HomeScreenController extends GetxController {
       String address = "${placemark.street}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}";
       log(address);
     }
+  }
+
+  Rx<Seller> selectedSeller = Seller(address: " ", name: "Select a seller", userId: " ", userLat: 0.0, userLng: 0.0).obs;
+
+  List<Seller> sellers = [];
+  Future<List<Seller>> fetchSellers() async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('sellers').get();
+    sellers = snapshot.docs.map((doc) => Seller.fromJson(doc.data())).toList();
+    sellers.insert(0, selectedSeller.value);
+    return sellers;
   }
 
   Future<void> placeOrder() async {
@@ -54,7 +65,7 @@ class HomeScreenController extends GetxController {
 
   Future<Map<String, dynamic>> createBuyerData() async {
     Position position = await LocationHelper.getPosition();
-    String userName = UserDataHelper.getUserId() ?? nameController.text;
+    String userName = UserDataHelper.getUserName() ?? nameController.text;
     return {
       "name": userName,
       "address": deliveryAddressController.text,
@@ -64,8 +75,8 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> saveOrderToDB() async {
-    String sellerUserId = "7983457308";
-    String buyerUserId = Get.find<LoginController>().phoneController.text;
+    String sellerUserId = sellers.firstWhere((element) => element.name == selectedSeller.value.name).userId;
+    String buyerUserId = UserDataHelper.getUserId()!;
     List<String> userIDs = [sellerUserId, buyerUserId];
     userIDs.sort();
     String collectionName = "${userIDs[0]}_${userIDs[1]}";
@@ -79,7 +90,7 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> saveBuyerDataToDB({required Map<String, dynamic> dataToBeSaved}) async {
-    await FirebaseFirestore.instance.collection(StringConstants.buyers).doc(Get.find<LoginController>().phoneController.text).set(dataToBeSaved);
+    await FirebaseFirestore.instance.collection(StringConstants.buyers).doc(UserDataHelper.getUserPhone()).set(dataToBeSaved);
   }
 
   Future<void> saveBuyerDataLocally() async {

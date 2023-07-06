@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:dapp/constants/string_constants.dart';
 import 'package:dapp/controllers/login_controller.dart';
-import 'package:dapp/views/home_screen.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/login_status_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
 import 'package:dapp/utils/user_data_helper.dart';
+import 'package:dapp/views/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +17,7 @@ class OtpVerificationScreenController extends GetxController {
   PhoneAuthCredential? credential;
   final otpController = TextEditingController(text: "111111");
   final auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   void verifyOtp() async {
     try {
@@ -30,7 +31,7 @@ class OtpVerificationScreenController extends GetxController {
         ScreenLoaderHelper.hideLoader();
       }
       await UserDataHelper.setUserId(userId: Get.find<LoginController>().phoneController.text);
-      Get.off(() =>  HomeScreen());
+      Get.off(() => HomeScreen());
       await LoginStatusHelper.setLoginStatus(isUserLoggedIn: true);
       UserDataHelper.setUserPhone(phoneNumber: Get.find<LoginController>().phoneController.text);
     } catch (e) {
