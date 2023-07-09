@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dapp/constants/string_constants.dart';
-import 'package:dapp/models/seller.dart';
+import 'package:dapp/constants/firebase_storage_keys.dart';
+import 'package:dapp/models/buyer_model.dart';
+import 'package:dapp/models/order_model.dart';
+import 'package:dapp/models/seller_model.dart';
+import 'package:dapp/utils/enums.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/location_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
@@ -32,12 +35,13 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  Rx<Seller> selectedSeller = Seller(address: " ", name: "Select a seller", userId: " ", userLat: 0.0, userLng: 0.0).obs;
+  Rx<SellerModel> selectedSeller = SellerModel(address: " ", name: "Select a seller", userId: " ", userLat: 0.0, userLng: 0.0).obs;
 
-  List<Seller> sellers = [];
-  Future<List<Seller>> fetchSellers() async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('sellers').get();
-    sellers = snapshot.docs.map((doc) => Seller.fromJson(doc.data())).toList();
+  List<SellerModel> sellers = [];
+  Future<List<SellerModel>> fetchSellers() async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection(FirebaseStorageKeys.sellers).where("userId", isNotEqualTo: UserDataHelper.getUserId()).get();
+    sellers = snapshot.docs.map((doc) => SellerModel.fromJson(doc.data())).toList();
     sellers.insert(0, selectedSeller.value);
     return sellers;
   }
@@ -46,7 +50,7 @@ class HomeScreenController extends GetxController {
     ScreenLoaderHelper.showLoader(Get.context!);
     try {
       await createAndSaveLatestBuyerData();
-      await saveOrderToDB();
+      await saveOrderDataToDB();
       ScreenLoaderHelper.hideLoader();
       // showOrderPlacedDialog();
       showOrderSuccessDialog();
@@ -66,31 +70,33 @@ class HomeScreenController extends GetxController {
   Future<Map<String, dynamic>> createBuyerData() async {
     Position position = await LocationHelper.getPosition();
     String userName = UserDataHelper.getUserName() ?? nameController.text;
-    return {
-      "name": userName,
-      "address": deliveryAddressController.text,
-      "userLat": position.latitude,
-      "userLng": position.longitude,
-    };
+    BuyerModel buyerData = BuyerModel(
+      address: deliveryAddressController.text,
+      name: userName,
+      userId: UserDataHelper.getUserId() ?? "",
+      userLat: position.latitude,
+      userLng: position.longitude,
+    );
+    return buyerData.toJson();
   }
 
-  Future<void> saveOrderToDB() async {
-    String sellerUserId = sellers.firstWhere((element) => element.name == selectedSeller.value.name).userId;
-    String buyerUserId = UserDataHelper.getUserId()!;
-    List<String> userIDs = [sellerUserId, buyerUserId];
-    userIDs.sort();
-    String collectionName = "${userIDs[0]}_${userIDs[1]}";
-    final docRef = FirebaseFirestore.instance.collection(StringConstants.allOrders).doc(collectionName).collection(StringConstants.orders).doc();
-    await docRef.set({
-      "orderTime": DateTime.now().toString(),
-      "orderid": docRef.id,
-      "quantity": selectedQuantity.value,
-      "status": "Pending",
-    });
+  Future<void> saveOrderDataToDB() async {
+    String sellerId = selectedSeller.value.userId;
+    String buyerId = UserDataHelper.getUserId()!;
+    final docRef = FirebaseFirestore.instance.collection(FirebaseStorageKeys.orders).doc();
+    OrderModel orderModel = OrderModel(
+      orderTime: DateTime.now().toString(),
+      orderId: docRef.id,
+      quantity: selectedQuantity.value,
+      status: OrderStatus.pending.toText(),
+      sellerId: sellerId,
+      buyerId: "1234567890",
+    );
+    await docRef.set(orderModel.toJson());
   }
 
   Future<void> saveBuyerDataToDB({required Map<String, dynamic> dataToBeSaved}) async {
-    await FirebaseFirestore.instance.collection(StringConstants.buyers).doc(UserDataHelper.getUserPhone()).set(dataToBeSaved);
+    await FirebaseFirestore.instance.collection(FirebaseStorageKeys.buyers).doc(UserDataHelper.getUserPhone()).set(dataToBeSaved);
   }
 
   Future<void> saveBuyerDataLocally() async {

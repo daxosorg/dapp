@@ -1,11 +1,11 @@
-class Seller {
+class SellerModel {
   final String address;
   final String name;
   final String userId;
   final double userLat;
   final double userLng;
 
-  Seller({
+  SellerModel({
     required this.address,
     required this.name,
     required this.userId,
@@ -13,8 +13,8 @@ class Seller {
     required this.userLng,
   });
 
-  factory Seller.fromJson(Map<String, dynamic> json) {
-    return Seller(
+  factory SellerModel.fromJson(Map<String, dynamic> json) {
+    return SellerModel(
       address: json['address'],
       name: json['name'],
       userId: json['userId'],

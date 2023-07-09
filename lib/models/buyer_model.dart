@@ -1,11 +1,11 @@
-class Buyer {
+class BuyerModel {
   final String address;
   final String name;
   final String userId;
   final double userLat;
   final double userLng;
 
-  Buyer({
+  BuyerModel({
     required this.address,
     required this.name,
     required this.userId,
@@ -13,8 +13,8 @@ class Buyer {
     required this.userLng,
   });
 
-  factory Buyer.fromJson(Map<String, dynamic> json) {
-    return Buyer(
+  factory BuyerModel.fromJson(Map<String, dynamic> json) {
+    return BuyerModel(
       address: json['address'],
       name: json['name'],
       userId: json['userId'],

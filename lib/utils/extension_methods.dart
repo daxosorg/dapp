@@ -1,3 +1,4 @@
+import 'package:dapp/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,4 +12,8 @@ extension StringToastExtension on String {
       duration: const Duration(seconds: 2),
     );
   }
+}
+
+extension OrderStatusToText on OrderStatus {
+  String toText() => toString().split('.').last;
 }

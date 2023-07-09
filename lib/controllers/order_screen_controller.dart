@@ -1,27 +1,32 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dapp/constants/string_constants.dart';
-import 'package:dapp/models/order.dart';
-import 'package:dapp/utils/extension_methods.dart';
-import 'package:dapp/utils/screen_loader_helper.dart';
+import 'package:dapp/constants/firebase_storage_keys.dart';
+import 'package:dapp/models/order_model.dart';
+import 'package:dapp/utils/user_data_helper.dart';
 import 'package:dapp/views/order_screen.dart';
 import 'package:get/get.dart';
 
 class OrdersScreenController extends GetxController {
-  final List<OrderModel> orders = [];
+  final RxList<OrderModel> orders = <OrderModel>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchOrders();
+  }
 
   Future<void> fetchOrders() async {
-    ScreenLoaderHelper.showLoader(Get.context!);
-    try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection(StringConstants.allOrders).get();
-      var orders = snapshot.docs.map((doc) => OrderModel.fromJson(doc.data())).toList();
-      ScreenLoaderHelper.hideLoader();
-    } on Exception catch (e) {
-      ScreenLoaderHelper.hideLoader();
-      e.toString().showToast();
-      log(e.toString());
+    CollectionReference allOrdersCollection = FirebaseFirestore.instance.collection(FirebaseStorageKeys.orders);
+    QuerySnapshot querySnapshot = await allOrdersCollection.where("buyerId", isEqualTo: UserDataHelper.getUserId()).get();
+    List<QueryDocumentSnapshot> orderDocuments = querySnapshot.docs;
+
+    for (QueryDocumentSnapshot orderDocument in orderDocuments) {
+      orders.add(OrderModel.fromJson(orderDocument.data() as Map<String, dynamic>));
     }
+    orders.map((element) {
+      log(element.toString());
+    });
   }
 
   void showOrderDetails(OrderModel OrderModel) {

@@ -36,7 +36,7 @@ class OtpVerificationScreenController extends GetxController {
       UserDataHelper.setUserPhone(phoneNumber: Get.find<LoginController>().phoneController.text);
     } catch (e) {
       ScreenLoaderHelper.hideLoader();
-      StringConstants.wrongOTP.showToast();
+      AppStrings.wrongOTP.showToast();
       log(e.toString());
     }
   }

@@ -1,6 +1,6 @@
 import 'package:dapp/constants/string_constants.dart';
 import 'package:dapp/controllers/home_screen_controller.dart';
-import 'package:dapp/models/seller.dart';
+import 'package:dapp/models/seller_model.dart';
 import 'package:dapp/utils/extension_methods.dart';
 import 'package:dapp/utils/login_status_helper.dart';
 import 'package:dapp/utils/screen_loader_helper.dart';
@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: FutureBuilder<List<Seller>>(
+                          child: FutureBuilder<List<SellerModel>>(
                             future: homeScreenController.fetchSellers(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                                   decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(8.0)),
                                   child: DropdownButtonHideUnderline(
                                     child: Obx(
-                                      () => DropdownButton<Seller>(
+                                      () => DropdownButton<SellerModel>(
                                         value: homeScreenController.selectedSeller.value,
                                         onChanged: (newValue) => homeScreenController.selectedSeller.value = newValue!,
                                         items: snapshot.data!.map((seller) {
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
-                        labelText: StringConstants.enterYourName,
+                        labelText: AppStrings.enterYourName,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.person, color: Colors.blue),
                       ),
@@ -118,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.black),
                       maxLines: null,
                       decoration: const InputDecoration(
-                        labelText: StringConstants.enterDeliveryAddress,
+                        labelText: AppStrings.enterDeliveryAddress,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.home, color: Colors.blue),
                       ),
@@ -146,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.0),
                         child: Text(
-                          StringConstants.orderNow,
+                          AppStrings.orderNow,
                           style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),

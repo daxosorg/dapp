@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                   keyboardType: TextInputType.phone,
                   style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
-                    labelText: StringConstants.enterYourPhoneNumber,
+                    labelText: AppStrings.enterYourPhoneNumber,
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.phone, color: Colors.blue),
                   ),
